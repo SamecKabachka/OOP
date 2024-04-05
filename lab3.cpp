@@ -3,6 +3,14 @@
 #include <vector>
 #include <algorithm>
 
+class Files;
+
+class Observer
+{
+public:
+    void GetInfo(const Files&);
+};
+
 class Files
 {
 private:
@@ -26,12 +34,15 @@ public:
         accessCount(ac) 
     {}
 
-    Files(const Files &fl) : /*copying*/
+    /*
+    Files(const Files &fl) : /copying/
         name(fl.name),
         size(fl.size),
         creationDate(fl.creationDate),
         accessCount(fl.accessCount)
-    {}
+    {}*/
+
+    friend void Observer::GetInfo(const Files&);
 
     //----------------functions----------------
 
@@ -55,11 +66,19 @@ public:
         void setSize(int size) {this->size = size;}
         void setDate(std::string date) {this->creationDate = date;}
         void setCount(int count) {this->accessCount = count;}*/
-        void operator = (int size)
+        void operator = (const Files& fl)
         {
-            this->size = size;
+            this->name = fl.name;
+            this->size = fl.size;
+            this->accessCount = fl.accessCount;
+            this->creationDate = fl.creationDate;
         }
 };
+
+void Observer::GetInfo(const Files& fl)
+{
+    std::cout<<"имя файла "<<fl.name<<" размер файла "<<fl.size<<" количество перезаписей "<<fl.accessCount<<" дата создания "<<fl.creationDate;
+}
 
 bool compareByName(const Files& file1, const Files& file2)
 {
