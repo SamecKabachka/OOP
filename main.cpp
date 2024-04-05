@@ -51,10 +51,10 @@ public:
         int getCount() const {return accessCount;}
 
         //----------------Sets----------------
-        std::string setName(std::string name) {this->name = name;}
-        int setSize(int size) {this->size = size;}
-        std::string setDate(std::string date) {this->creationDate = date;}
-        int setCount(int count) {this->accessCount = count;}
+        void setName(std::string name) {this->name = name;}
+        void setSize(int size) {this->size = size;}
+        void setDate(std::string date) {this->creationDate = date;}
+        void setCount(int count) {this->accessCount = count;}
 };
 
 bool compareByName(const Files& file1, const Files& file2)
