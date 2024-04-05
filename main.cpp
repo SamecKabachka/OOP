@@ -5,32 +5,63 @@
 
 class Files
 {
-public:
+private:
     std::string name;
     int size;
     std::string creationDate;
     int accessCount;
 
-    Files(std::string n, int s, std::string cd, int ac)
-        : name(n), size(s), creationDate(cd), accessCount(ac) {}
+public:
+
+    //----------------designers----------------
+    Files() : /*default*/
+        size(NULL),
+        accessCount(NULL)
+    {}
+    
+    Files(std::string n, int s, std::string cd, int ac) : /*parameters*/
+        name(n), 
+        size(s), 
+        creationDate(cd), 
+        accessCount(ac) 
+    {}
+
+    Files(const Files &fl) : /*copying*/
+        name(fl.name),
+        size(fl.size),
+        creationDate(fl.creationDate),
+        accessCount(fl.accessCount)
+    {}
+
+    //----------------functions----------------
+
+      void printFiles() const
+        {
+          std::cout << "Имя файла: " << name << std::endl;
+          std::cout << "Размер: " << size << " байт" << std::endl;
+          std::cout << "Дата создания: " << creationDate << std::endl;
+          std::cout << "Количество обращений: " << accessCount << std::endl;
+          std::cout << std::endl;
+        }
+
+        //----------------Gets----------------
+        std::string getName() const {return name;}
+        int getSize() const {return size;}
+        std::string getDate() const {return creationDate;}
+        int getCount() const {return accessCount;}
+
+        //----------------Sets----------------
+        std::string setName(std::string name) {this->name = name;}
+        int setSize(int size) {this->size = size;}
+        std::string setDate(std::string date) {this->creationDate = date;}
+        int setCount(int count) {this->accessCount = count;}
 };
 
 bool compareByName(const Files& file1, const Files& file2)
 {
-    return file1.name < file2.name;
+    return file1.getName() < file2.getName();
 }
 
-void printFiles(const std::vector<Files>& files)
-{
-    for (const Files& file : files)
-    {
-        std::cout << "Имя файла: " << file.name << std::endl;
-        std::cout << "Размер: " << file.size << " байт" << std::endl;
-        std::cout << "Дата создания: " << file.creationDate << std::endl;
-        std::cout << "Количество обращений: " << file.accessCount << std::endl;
-        std::cout << std::endl;
-    }
-}
 
 int main()
 {
@@ -70,7 +101,7 @@ int main()
     // а) список файлов, упорядоченный в алфавитном порядке
     std::cout << "Список файлов, упорядоченный в алфавитном порядке:" << std::endl;
     std::sort(files.begin(), files.end(), compareByName);
-    printFiles(files);
+    for (const Files& file : files) file.printFiles();
     std::cout << std::endl;
 
     // б) список файлов, размер которых превышает заданный
@@ -82,14 +113,14 @@ int main()
     std::vector<Files> largeFiles;
     for (const Files& file : files)
     {
-        if (file.size > maxSize)
+        if (file.getSize() > maxSize)
         {
             largeFiles.push_back(file);
         }
     }
 
     std::cout << "Список файлов, размер которых превышает " << maxSize << " байт:" << std::endl;
-    printFiles(largeFiles);
+    for (const Files& file : largeFiles) file.printFiles();
     std::cout << std::endl;
 
     // в) список файлов, число обращений к которым превышает заданное
@@ -101,14 +132,14 @@ int main()
     std::vector<Files> frequentlyAccessedFiles;
     for (const Files& file : files)
     {
-        if (file.accessCount > minAccessCount)
+        if (file.getCount() > minAccessCount)
         {
             frequentlyAccessedFiles.push_back(file);
         }
     }
 
     std::cout << "Список файлов, количество обращений к которым превышает " << minAccessCount << ":" << std::endl;
-    printFiles(frequentlyAccessedFiles);
+    for (const Files& file : frequentlyAccessedFiles) file.printFiles();
 
     return 0;
 }
