@@ -73,6 +73,22 @@ public:
             this->accessCount = fl.accessCount;
             this->creationDate = fl.creationDate;
         }
+
+        bool operator == (const Files& fl)
+        {
+            return this->name == fl.getName()
+                and this->size == fl.getSize()
+                and this->creationDate == fl.getDate()
+                and this->accessCount == fl.getCount();
+        }
+       
+        bool operator != (const Files& fl)
+        {
+            return this->name != fl.getName()
+                and this->size != fl.getSize()
+                and this->creationDate != fl.getDate()
+                and this->accessCount != fl.getCount();
+        }
 };
 
 void Observer::GetInfo(const Files& fl)
