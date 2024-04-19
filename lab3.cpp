@@ -4,12 +4,50 @@
 #include <algorithm>
 
 class Files;
+//----------------класс аггрегатор----------------
+class Aggregator
+{       
+private:
+    std::string name;
+    int size;
+    std::string creationDate;
+    int accessCount;
 
+public:
+    Aggregator* next;
+
+    Aggregator ()
+    {
+        name = "";
+        creationDate = "";
+        size = NULL;
+        accessCount = NULL;
+        next = NULL;
+    }
+     
+    Aggregator (std::string n, int s, std::string cd, int ac)  /*с параметрами*/
+    {
+        this-> name = n; 
+        this->size = s;
+        this->creationDate = cd; 
+        this->accessCount = ac; 
+        this->next = NULL;
+    }
+
+void GetInfo()
+{
+    std::cout<<"имя файла "<<name<<" размер файла "<<size<<" количество перезаписей "<<accessCount<<" дата создания "<<creationDate;
+}
+};
+
+//----------------Класс обсервер----------------
 class Observer
 {
 public:
     void GetInfo(const Files&);
 };
+
+//----------------класс файлов----------------
 
 class Files
 {
@@ -18,33 +56,22 @@ private:
     int size;
     std::string creationDate;
     int accessCount;
+    Aggregator *head; 
 
 public:
 
-    //----------------designers----------------
-    Files() : /*default*/
-        size(NULL),
-        accessCount(NULL)
-    {}
+    //----------------конструкторы----------------
     
-    Files(std::string n, int s, std::string cd, int ac) : /*parameters*/
+    Files(std::string n, int s, std::string cd, int ac) : /*с параметрами*/
         name(n), 
         size(s), 
         creationDate(cd), 
         accessCount(ac) 
     {}
 
-    /*
-    Files(const Files &fl) : /copying/
-        name(fl.name),
-        size(fl.size),
-        creationDate(fl.creationDate),
-        accessCount(fl.accessCount)
-    {}*/
+    friend void Observer::GetInfo(const Files&);//указание что метод гетинфо класса обсервер являеться дружественным
 
-    friend void Observer::GetInfo(const Files&);
-
-    //----------------functions----------------
+    //----------------функции----------------
 
       void printFiles() const
         {
@@ -61,11 +88,13 @@ public:
         std::string getDate() const {return creationDate;}
         int getCount() const {return accessCount;}
 
-        /*----------------Sets----------------
+        //----------------Sets----------------
         void setName(std::string name) {this->name = name;}
         void setSize(int size) {this->size = size;}
         void setDate(std::string date) {this->creationDate = date;}
-        void setCount(int count) {this->accessCount = count;}*/
+        void setCount(int count) {this->accessCount = count;}
+
+        //перегрузки операторов ==, != и =
         void operator = (const Files& fl)
         {
             this->name = fl.name;
@@ -88,6 +117,19 @@ public:
                 and this->size != fl.getSize()
                 and this->creationDate != fl.getDate()
                 and this->accessCount != fl.getCount();
+        }
+
+        void operator - ()
+        {
+            Aggregator *tmp;
+            tmp = head;
+            head = head->next;
+            tmp->GetInfo();
+        }
+
+        void operator + ()
+        {
+           Aggregator tmp(name, size, creationDate, accessCount);
         }
 };
 
